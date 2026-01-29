@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insurance AI Governance Demo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="aurora"></div>
+    <div class="page">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">AI governance for insurers</p>
+          <h1>Regulation-ready AI portfolio control room</h1>
+          <p class="subtitle">
+            Unified inventory, fairness evidence, and audit trails across OSFI E-23, Colorado 10-1-1,
+            NY DFS Letter 7, and the EU AI Act.
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <button class="ghost" id="btn-export">Generate regulator report</button>
+          <button class="primary" id="btn-new-model">Register new model</button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="nav">
+          <div class="nav-section">
+            <p class="nav-title">Views</p>
+            <button class="nav-item active" data-view="overview">Portfolio overview</button>
+            <button class="nav-item" data-view="inventory">Model inventory</button>
+            <button class="nav-item" data-view="workflows">Workflow & approvals</button>
+            <button class="nav-item" data-view="fairness">Fairness & bias</button>
+            <button class="nav-item" data-view="monitoring">Monitoring & drift</button>
+            <button class="nav-item" data-view="regulatory">Regulatory mapping</button>
+            <button class="nav-item" data-view="audit">Audit evidence</button>
+            <button class="nav-item" data-view="board">Board/CRO view</button>
+          </div>
+          <div class="nav-section">
+            <p class="nav-title">Quick actions</p>
+            <button class="nav-item" data-toast="Model lineage captured">Capture lineage snapshot</button>
+            <button class="nav-item" data-toast="Fairness testing initiated">Run fairness test</button>
+            <button class="nav-item" data-toast="Monitoring policy updated">Update monitoring policy</button>
+          </div>
+          <div class="nav-footer">
+            <p>Demo mode · Mock data</p>
+            <span class="pill">GCP + Python</span>
+          </div>
+        </aside>
+
+        <main class="content">
+          <section class="view active" id="overview">
+            <div class="card-grid">
+              <div class="card">
+                <p class="card-label">Total AI models</p>
+                <h2 id="stat-total">0</h2>
+                <p class="card-meta">Enterprise + vendor inventory</p>
+              </div>
+              <div class="card">
+                <p class="card-label">High-risk models</p>
+                <h2 id="stat-high">0</h2>
+                <p class="card-meta">EU high-risk + materiality tier 4</p>
+              </div>
+              <div class="card">
+                <p class="card-label">Open approvals</p>
+                <h2 id="stat-approvals">0</h2>
+                <p class="card-meta">Pending validation + MRM sign-off</p>
+              </div>
+              <div class="card">
+                <p class="card-label">Active incidents</p>
+                <h2 id="stat-incidents">0</h2>
+                <p class="card-meta">Bias drift + performance decay</p>
+              </div>
+            </div>
+
+            <div class="split">
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Risk tier distribution</h3>
+                  <span class="pill">Auto-derived + override</span>
+                </div>
+                <div id="risk-bars" class="bars"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Regulatory coverage gaps</h3>
+                  <span class="pill">Cross-jurisdiction</span>
+                </div>
+                <ul id="gap-list" class="gap-list"></ul>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Top high-risk models</h3>
+                <button class="ghost" data-view="inventory">Open inventory</button>
+              </div>
+              <div class="table" id="high-risk-table"></div>
+            </div>
+          </section>
+
+          <section class="view" id="inventory">
+            <div class="inventory-header">
+              <div>
+                <h2>Model inventory</h2>
+                <p>Enterprise + vendor AI models with lineage, owners, and compliance coverage.</p>
+              </div>
+              <div class="inventory-filters">
+                <input type="search" id="search" placeholder="Search model, owner, purpose" />
+                <select id="risk-filter">
+                  <option value="">All risk tiers</option>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                  <option value="EU High-Risk">EU High-Risk</option>
+                </select>
+              </div>
+            </div>
+            <div class="inventory-layout">
+              <div class="panel">
+                <div class="table" id="inventory-table"></div>
+              </div>
+              <div class="panel detail" id="model-detail">
+                <div class="panel-header">
+                  <h3>Model detail</h3>
+                  <span class="pill" id="detail-status"></span>
+                </div>
+                <div id="detail-body" class="detail-body"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="workflows">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Workflow & approvals</h2>
+                <span class="pill">Risk-tier based</span>
+              </div>
+              <div class="workflow" id="workflow-board"></div>
+            </div>
+            <div class="split">
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Exceptions</h3>
+                  <span class="pill">Expiring waivers</span>
+                </div>
+                <ul class="list" id="exceptions"></ul>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Evidence attachments</h3>
+                  <span class="pill">Docs + notebooks</span>
+                </div>
+                <ul class="list" id="evidence"></ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="fairness">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Fairness & bias testing</h2>
+                <span class="pill">Colorado 10-1-1 + EU AI Act</span>
+              </div>
+              <div class="split">
+                <div>
+                  <h3 class="section-title">Standard metrics</h3>
+                  <div class="metrics" id="fairness-metrics"></div>
+                </div>
+                <div>
+                  <h3 class="section-title">Remediation actions</h3>
+                  <ul class="list" id="remediations"></ul>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Protected class coverage</h3>
+                <span class="pill">Pre + post deployment</span>
+              </div>
+              <div class="table" id="bias-table"></div>
+            </div>
+          </section>
+
+          <section class="view" id="monitoring">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Production monitoring</h2>
+                <span class="pill">Data drift + bias drift</span>
+              </div>
+              <div class="monitor-grid" id="monitor-grid"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Alert timeline</h3>
+                <span class="pill">Last 30 days</span>
+              </div>
+              <ul class="timeline" id="alert-timeline"></ul>
+            </div>
+          </section>
+
+          <section class="view" id="regulatory">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Regulatory mapping matrix</h2>
+                <span class="pill">E-23 · 10-1-1 · NY DFS · EU AI Act</span>
+              </div>
+              <div class="table" id="reg-matrix"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Coverage summary</h3>
+                <span class="pill">Controls → regulations</span>
+              </div>
+              <div class="coverage" id="coverage-cards"></div>
+            </div>
+          </section>
+
+          <section class="view" id="audit">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Audit evidence package</h2>
+                <span class="pill">Traceability ready</span>
+              </div>
+              <div class="table" id="audit-table"></div>
+            </div>
+          </section>
+
+          <section class="view" id="board">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Board / CRO portfolio view</h2>
+                <span class="pill">Senior oversight</span>
+              </div>
+              <div class="board-grid" id="board-grid"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Material incidents</h3>
+                <span class="pill">Last quarter</span>
+              </div>
+              <ul class="timeline" id="board-incidents"></ul>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Register new AI model</h3>
+          <button class="ghost" id="modal-close">Close</button>
+        </div>
+        <form id="model-form" class="modal-body">
+          <label>
+            Model name
+            <input type="text" name="name" placeholder="Pricing Elasticity v3" required />
+          </label>
+          <label>
+            Purpose
+            <input type="text" name="purpose" placeholder="Auto pricing optimization" required />
+          </label>
+          <label>
+            Owner
+            <input type="text" name="owner" placeholder="Sarah Kim" required />
+          </label>
+          <label>
+            Business line
+            <select name="line">
+              <option>Pricing</option>
+              <option>Underwriting</option>
+              <option>Claims</option>
+              <option>Fraud</option>
+              <option>Marketing</option>
+            </select>
+          </label>
+          <label>
+            Deployment
+            <input type="text" name="deployment" placeholder="GCP · Vertex AI" required />
+          </label>
+          <label>
+            Sensitive attributes
+            <input type="text" name="attributes" placeholder="Age, gender, postal code" />
+          </label>
+          <button class="primary" type="submit">Register</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

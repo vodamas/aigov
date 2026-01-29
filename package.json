@@ -1,0 +1,10 @@
+{
+  "name": "ai-governance-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web-based demo for insurance AI governance",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
