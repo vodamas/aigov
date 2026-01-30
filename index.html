@@ -27,15 +27,33 @@
       <div class="layout">
         <aside class="nav">
           <div class="nav-section">
-            <p class="nav-title">Views</p>
+            <p class="nav-title">Core</p>
             <button class="nav-item active" data-view="overview">Portfolio overview</button>
             <button class="nav-item" data-view="inventory">Model inventory</button>
+            <button class="nav-item" data-view="use-cases">Use-case approvals</button>
             <button class="nav-item" data-view="workflows">Workflow & approvals</button>
-            <button class="nav-item" data-view="fairness">Fairness & bias</button>
             <button class="nav-item" data-view="monitoring">Monitoring & drift</button>
+            <button class="nav-item" data-view="reports">Reports & trends</button>
+          </div>
+          <div class="nav-section">
+            <p class="nav-title">Agentic controls</p>
+            <button class="nav-item" data-view="agents">Agent registry</button>
+            <button class="nav-item" data-view="agent-logs">Agent activity logs</button>
+            <button class="nav-item" data-view="oversight">Oversight effectiveness</button>
+            <button class="nav-item" data-view="knowledge">Knowledge governance</button>
+            <button class="nav-item" data-view="replay">Incident replay</button>
+            <button class="nav-item" data-view="training">Training & attestations</button>
+          </div>
+          <div class="nav-section">
+            <p class="nav-title">Compliance</p>
+            <button class="nav-item" data-view="fairness">Fairness & bias</button>
             <button class="nav-item" data-view="regulatory">Regulatory mapping</button>
             <button class="nav-item" data-view="audit">Audit evidence</button>
             <button class="nav-item" data-view="board">Board/CRO view</button>
+          </div>
+          <div class="nav-section">
+            <p class="nav-title">Operations</p>
+            <button class="nav-item" data-view="connections">Connections & live checks</button>
           </div>
           <div class="nav-section">
             <p class="nav-title">Quick actions</p>
@@ -52,25 +70,35 @@
         <main class="content">
           <section class="view active" id="overview">
             <div class="card-grid">
-              <div class="card">
+              <div class="card clickable" data-drill="inventory">
                 <p class="card-label">Total AI models</p>
                 <h2 id="stat-total">0</h2>
                 <p class="card-meta">Enterprise + vendor inventory</p>
               </div>
-              <div class="card">
+              <div class="card clickable" data-drill="high-risk">
                 <p class="card-label">High-risk models</p>
                 <h2 id="stat-high">0</h2>
                 <p class="card-meta">EU high-risk + materiality tier 4</p>
               </div>
-              <div class="card">
+              <div class="card clickable" data-drill="approvals">
                 <p class="card-label">Open approvals</p>
                 <h2 id="stat-approvals">0</h2>
                 <p class="card-meta">Pending validation + MRM sign-off</p>
               </div>
-              <div class="card">
+              <div class="card clickable" data-drill="incidents">
                 <p class="card-label">Active incidents</p>
                 <h2 id="stat-incidents">0</h2>
                 <p class="card-meta">Bias drift + performance decay</p>
+              </div>
+              <div class="card clickable" data-drill="agents">
+                <p class="card-label">Registered agents</p>
+                <h2 id="stat-agents">0</h2>
+                <p class="card-meta">Identity + authority tracked</p>
+              </div>
+              <div class="card clickable" data-drill="use-cases">
+                <p class="card-label">Use-cases pending</p>
+                <h2 id="stat-usecases">0</h2>
+                <p class="card-meta">Risk-bounded approvals</p>
               </div>
             </div>
 
@@ -127,7 +155,199 @@
                   <span class="pill" id="detail-status"></span>
                 </div>
                 <div id="detail-body" class="detail-body"></div>
+                <div class="detail-divider"></div>
+                <div>
+                  <h4 class="section-title">Lineage & data governance</h4>
+                  <div id="lineage-body" class="detail-body"></div>
+                </div>
               </div>
+            </div>
+          </section>
+
+          <section class="view" id="connections">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Upload models or connect to GCP</h2>
+                <span class="pill">Demo-only simulation</span>
+              </div>
+              <div class="split">
+                <form class="panel card" id="upload-form">
+                  <h3 class="section-title">Upload model artifact</h3>
+                  <label class="inline-label">
+                    Model file
+                    <input type="file" id="model-file" />
+                  </label>
+                  <label class="inline-label">
+                    Business line
+                    <select id="upload-line">
+                      <option>Pricing</option>
+                      <option>Underwriting</option>
+                      <option>Claims</option>
+                      <option>Fraud</option>
+                      <option>Marketing</option>
+                    </select>
+                  </label>
+                  <label class="inline-label">
+                    Deployment target
+                    <input type="text" id="upload-deploy" placeholder="GCP · Vertex AI" />
+                  </label>
+                  <button class="primary" type="submit">Simulate upload & register</button>
+                </form>
+                <div class="panel card">
+                  <h3 class="section-title">Connect GCP workspace</h3>
+                  <p class="card-meta">Mock OAuth + scoped token validation.</p>
+                  <button class="primary" id="btn-gcp-connect">Connect GCP (demo)</button>
+                  <div class="detail-body">
+                    <div><strong>Connection status:</strong> <span id="gcp-status">Not connected</span></div>
+                    <div><strong>Scopes:</strong> vertexai.read, storage.read</div>
+                    <div><strong>Last sync:</strong> <span id="gcp-last-sync">—</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Real-time explainability & fairness checks</h3>
+                <span class="pill">Streaming demo</span>
+              </div>
+              <div class="split" id="live-metrics"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Live check results</h3>
+                <span class="pill">Updated every 5s</span>
+              </div>
+              <div class="table" id="live-checks-table"></div>
+            </div>
+          </section>
+
+          <section class="view" id="agents">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Agent identity, authority & delegation registry</h2>
+                <span class="pill">Immutable IDs + OAuth scopes</span>
+              </div>
+              <div class="table" id="agent-table"></div>
+            </div>
+            <div class="split">
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Delegation chains</h3>
+                  <span class="pill">Human → agent → sub-agent</span>
+                </div>
+                <ul class="timeline" id="delegation-timeline"></ul>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Authority hotspots</h3>
+                  <span class="pill">High-privilege agents</span>
+                </div>
+                <ul class="list" id="authority-hotspots"></ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="use-cases">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Risk-bounded use-case approvals</h2>
+                <span class="pill">Pre-deployment gate</span>
+              </div>
+              <div class="table" id="usecase-table"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Linked assets</h3>
+                <span class="pill">Use case ↔ agents ↔ models ↔ systems</span>
+              </div>
+              <div class="table" id="usecase-links"></div>
+            </div>
+          </section>
+
+          <section class="view" id="oversight">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Human-in-the-loop effectiveness</h2>
+                <span class="pill">Anti rubber-stamp analytics</span>
+              </div>
+              <div class="split" id="oversight-metrics"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Approval audit trail</h3>
+                <span class="pill">Time-on-task + edits</span>
+              </div>
+              <div class="table" id="oversight-table"></div>
+            </div>
+          </section>
+
+          <section class="view" id="agent-logs">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Agent action & plan logging</h2>
+                <span class="pill">Plans + tool calls</span>
+              </div>
+              <div class="table" id="agent-log-table"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Replay breadcrumbs</h3>
+                <span class="pill">Approvals + incidents linked</span>
+              </div>
+              <ul class="timeline" id="log-timeline"></ul>
+            </div>
+          </section>
+
+          <section class="view" id="knowledge">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Closed-loop content & knowledge governance</h2>
+                <span class="pill">Source registry + citations</span>
+              </div>
+              <div class="table" id="knowledge-table"></div>
+            </div>
+            <div class="split">
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Pending source approvals</h3>
+                  <span class="pill">Change control</span>
+                </div>
+                <ul class="list" id="knowledge-approvals"></ul>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Drift & deprecation alerts</h3>
+                  <span class="pill">Source freshness</span>
+                </div>
+                <ul class="timeline" id="knowledge-alerts"></ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="view" id="replay">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Incident replay & root-cause analysis</h2>
+                <span class="pill">End-to-end reconstruction</span>
+              </div>
+              <div class="table" id="replay-table"></div>
+            </div>
+          </section>
+
+          <section class="view" id="training">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>End-user responsibility & training attestation</h2>
+                <span class="pill">Block access if expired</span>
+              </div>
+              <div class="table" id="training-table"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Role coverage</h3>
+                <span class="pill">Interactor · Integrator · Overseer</span>
+              </div>
+              <div class="coverage" id="training-coverage"></div>
             </div>
           </section>
 
@@ -176,6 +396,34 @@
             </div>
             <div class="panel">
               <div class="panel-header">
+                <h3>Model fairness deep dive</h3>
+                <span class="pill">Python pipeline view</span>
+              </div>
+              <div class="split">
+                <div>
+                  <label class="inline-label">
+                    Model
+                    <select id="fairness-model"></select>
+                  </label>
+                  <div class="code-block" id="fairness-code"></div>
+                </div>
+                <div>
+                  <h4 class="section-title">What-if adjustments</h4>
+                  <div class="slider-group">
+                    <label>Reweight sensitive attributes <span id="slider-weight">0.5</span></label>
+                    <input id="weight-slider" type="range" min="0" max="1" step="0.1" value="0.5" />
+                  </div>
+                  <div class="slider-group">
+                    <label>Decision threshold <span id="slider-threshold">0.6</span></label>
+                    <input id="threshold-slider" type="range" min="0.3" max="0.9" step="0.05" value="0.6" />
+                  </div>
+                  <button class="primary" id="run-fairness">Re-run fairness tests</button>
+                  <div class="metric-stack" id="fairness-output"></div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
                 <h3>Protected class coverage</h3>
                 <span class="pill">Pre + post deployment</span>
               </div>
@@ -193,10 +441,71 @@
             </div>
             <div class="panel">
               <div class="panel-header">
+                <h3>Drift deep dive</h3>
+                <span class="pill">Simulated data shift</span>
+              </div>
+              <div class="split">
+                <div>
+                  <label class="inline-label">
+                    Model
+                    <select id="monitor-model"></select>
+                  </label>
+                  <div class="code-block" id="monitor-code"></div>
+                </div>
+                <div>
+                  <h4 class="section-title">Stress the data</h4>
+                  <div class="slider-group">
+                    <label>Population shift (PSI) <span id="psi-value">0.2</span></label>
+                    <input id="psi-slider" type="range" min="0.05" max="0.5" step="0.05" value="0.2" />
+                  </div>
+                  <div class="slider-group">
+                    <label>Performance decay <span id="perf-value">0.04</span></label>
+                    <input id="perf-slider" type="range" min="0.01" max="0.12" step="0.01" value="0.04" />
+                  </div>
+                  <button class="primary" id="run-monitoring">Re-run monitoring checks</button>
+                  <div class="metric-stack" id="monitor-output"></div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
                 <h3>Alert timeline</h3>
                 <span class="pill">Last 30 days</span>
               </div>
               <ul class="timeline" id="alert-timeline"></ul>
+            </div>
+          </section>
+
+          <section class="view" id="reports">
+            <div class="panel">
+              <div class="panel-header">
+                <h2>Performance monitoring & trends</h2>
+                <span class="pill">30/90 day views</span>
+              </div>
+              <div class="report-grid" id="report-summary"></div>
+            </div>
+            <div class="split">
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Model performance trends</h3>
+                  <span class="pill">AUC / RMSE / Lift</span>
+                </div>
+                <div class="report-list" id="performance-trends"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-header">
+                  <h3>Reliability & stability stats</h3>
+                  <span class="pill">Drift + bias signals</span>
+                </div>
+                <div class="report-list" id="stability-stats"></div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Operations KPIs</h3>
+                <span class="pill">Monthly snapshots</span>
+              </div>
+              <div class="report-grid" id="ops-kpis"></div>
             </div>
           </section>
 
@@ -290,6 +599,16 @@
     </div>
 
     <div class="toast" id="toast"></div>
+
+    <div class="modal hidden" id="doc-modal">
+      <div class="modal-card large">
+        <div class="modal-header">
+          <h3 id="doc-title">Detail</h3>
+          <button class="ghost" id="doc-close">Close</button>
+        </div>
+        <div class="modal-body" id="doc-body"></div>
+      </div>
+    </div>
 
     <script src="app.js"></script>
   </body>

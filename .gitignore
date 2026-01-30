@@ -1,3 +1,5 @@
 node_modules
 .DS_Store
 .env
+key1
+key1.pub
