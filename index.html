@@ -455,11 +455,33 @@
                 <div>
                   <h4 class="section-title">Stress the data</h4>
                   <div class="slider-group">
-                    <label>Population shift (PSI) <span id="psi-value">0.2</span></label>
+                    <label>
+                      <span class="term">
+                        Population shift (PSI)
+                        <span
+                          class="info"
+                          tabindex="0"
+                          data-tooltip="Population Stability Index compares production vs training distributions. Higher PSI means more drift."
+                          >i</span
+                        >
+                      </span>
+                      <span id="psi-value">0.2</span>
+                    </label>
                     <input id="psi-slider" type="range" min="0.05" max="0.5" step="0.05" value="0.2" />
                   </div>
                   <div class="slider-group">
-                    <label>Performance decay <span id="perf-value">0.04</span></label>
+                    <label>
+                      <span class="term">
+                        Performance decay
+                        <span
+                          class="info"
+                          tabindex="0"
+                          data-tooltip="Drop in model performance versus baseline; higher decay suggests retraining."
+                          >i</span
+                        >
+                      </span>
+                      <span id="perf-value">0.04</span>
+                    </label>
                     <input id="perf-slider" type="range" min="0.01" max="0.12" step="0.01" value="0.04" />
                   </div>
                   <button class="primary" id="run-monitoring">Re-run monitoring checks</button>

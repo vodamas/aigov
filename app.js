@@ -482,6 +482,45 @@ const state = {
   ]
 };
 
+const tooltipCopy = {
+  "Disparate impact":
+    "Ratio of favorable outcomes across groups. Values closer to 1 indicate parity.",
+  "Equalized odds":
+    "Difference in error rates across groups. Lower values indicate more parity.",
+  "Calibration by group":
+    "Gap between predicted and observed outcomes across groups.",
+  "Calibration gap":
+    "Difference between predicted and observed rates across groups.",
+  "Explainability stability":
+    "How consistent feature attributions remain over time.",
+  "Fairness delta":
+    "Change in fairness metric versus baseline; smaller is better.",
+  "Calibration drift":
+    "Shift in probability calibration over time.",
+  "Performance decay":
+    "Drop in model performance versus baseline over time.",
+  "Population stability (PSI)":
+    "Population Stability Index measures distribution shift. Higher PSI means more drift.",
+  "Population shift (PSI)":
+    "Population Stability Index compares production vs training distributions.",
+  "Bias drift delta":
+    "Change in bias metric over time; higher indicates growing disparity.",
+  "Data drift PSI":
+    "PSI between production and training data."
+};
+
+function escapeAttr(value) {
+  return String(value).replace(/"/g, "&quot;");
+}
+
+function withTooltip(label) {
+  const tip = tooltipCopy[label];
+  if (!tip) return label;
+  return `<span class="term">${label}<span class="info" tabindex="0" data-tooltip="${escapeAttr(
+    tip
+  )}">i</span></span>`;
+}
+
 const views = document.querySelectorAll(".view");
 const navItems = document.querySelectorAll(".nav-item[data-view]");
 const toast = document.getElementById("toast");
@@ -753,7 +792,7 @@ function renderFairness() {
     .map(
       (metric) => `
       <div class="metric">
-        <span>${metric.label}</span>
+        <span>${withTooltip(metric.label)}</span>
         <strong>${metric.value}</strong>
         <span>${metric.note}</span>
       </div>
@@ -778,7 +817,13 @@ function renderFairness() {
     .map((row) => tableRow(row))
     .join("");
   biasTable.innerHTML =
-    tableHeader(["Model", "Protected class", "Status", "Disparate impact", "Last run"]) + rows;
+    tableHeader([
+      "Model",
+      "Protected class",
+      "Status",
+      withTooltip("Disparate impact"),
+      "Last run"
+    ]) + rows;
 }
 
 function renderMonitoring() {
@@ -789,7 +834,7 @@ function renderMonitoring() {
       <div class="monitor-card">
         <strong>${m.name}</strong>
         <p class="card-meta">${m.monitoring} · Drift ${m.drift}</p>
-        <p class="card-meta">Data drift PSI ${m.drift === "Elevated" ? "0.32" : "0.08"}</p>
+        <p class="card-meta">${withTooltip("Data drift PSI")} ${m.drift === "Elevated" ? "0.32" : "0.08"}</p>
       </div>
     `
     )
@@ -1327,7 +1372,7 @@ function renderLiveMetrics() {
     .map(
       (metric) => `
       <div class="card">
-        <p class="card-label">${metric.label}</p>
+        <p class="card-label">${withTooltip(metric.label)}</p>
         <h2>${metric.value}</h2>
         <p class="card-meta">${metric.note}</p>
       </div>
@@ -1344,7 +1389,7 @@ function renderLiveChecks() {
     return tableRow(
       [
         check.model,
-        check.check,
+        withTooltip(check.check),
         check.value.toFixed(2),
         statusTag(check.status, tone),
         check.updated
@@ -1396,15 +1441,27 @@ function renderReports() {
   if (stability) {
     stability.innerHTML = state.stabilityStats
       .map(
-        (item) => `
+        (item) => {
+          let label = item.label;
+          if (item.label.includes("PSI")) {
+            label = `<span class="term">${item.label}<span class="info" tabindex="0" data-tooltip="${escapeAttr(
+              tooltipCopy["Population stability (PSI)"]
+            )}">i</span></span>`;
+          } else if (item.label.includes("Bias drift")) {
+            label = `<span class="term">${item.label}<span class="info" tabindex="0" data-tooltip="${escapeAttr(
+              tooltipCopy["Bias drift delta"]
+            )}">i</span></span>`;
+          }
+          return `
         <div class="report-row">
           <div>
-            <strong>${item.label}</strong>
+            <strong>${label}</strong>
             <p class="card-meta">Trend: ${item.trend}</p>
           </div>
           <div class="report-value">${item.value}</div>
         </div>
-      `
+      `;
+        }
       )
       .join("");
   }
@@ -1711,17 +1768,17 @@ function runFairness() {
   const calibration = Math.max(0.01, Math.min(0.08, 0.04 + (threshold - 0.6) * 0.05));
   fairnessOutput.innerHTML = `
     <div class="metric">
-      <span>Disparate impact</span>
+      <span>${withTooltip("Disparate impact")}</span>
       <strong>${disparate.toFixed(2)}</strong>
       <span>Target ≥ 0.80</span>
     </div>
     <div class="metric">
-      <span>Equalized odds</span>
+      <span>${withTooltip("Equalized odds")}</span>
       <strong>${odds.toFixed(2)}</strong>
       <span>Target ≤ 0.10</span>
     </div>
     <div class="metric">
-      <span>Calibration gap</span>
+      <span>${withTooltip("Calibration gap")}</span>
       <strong>${calibration.toFixed(2)}</strong>
       <span>Target ≤ 0.05</span>
     </div>
@@ -1734,17 +1791,17 @@ function runMonitoring() {
   const biasShift = Math.max(0.01, Math.min(0.2, 0.05 + (psi - 0.2) * 0.3));
   monitorOutput.innerHTML = `
     <div class="metric">
-      <span>Population stability (PSI)</span>
+      <span>${withTooltip("Population stability (PSI)")}</span>
       <strong>${psi.toFixed(2)}</strong>
       <span>${psi > 0.25 ? "Alert threshold exceeded" : "Within tolerance"}</span>
     </div>
     <div class="metric">
-      <span>Performance decay</span>
+      <span>${withTooltip("Performance decay")}</span>
       <strong>${perf.toFixed(2)}</strong>
       <span>${perf > 0.06 ? "Retrain recommended" : "Stable"}</span>
     </div>
     <div class="metric">
-      <span>Bias drift delta</span>
+      <span>${withTooltip("Bias drift delta")}</span>
       <strong>${biasShift.toFixed(2)}</strong>
       <span>${biasShift > 0.08 ? "Bias review required" : "Stable"}</span>
     </div>
