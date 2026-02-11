@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI & Model Governance in Practice | FHLB Meeting Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="meeting-mode">
+    <div class="bg-layer" aria-hidden="true"></div>
+    <header class="sticky-header">
+      <div class="header-inner">
+        <div class="brand">
+          <p class="eyebrow">FHLB Meeting Guide</p>
+          <h1>AI & Model Governance in Practice</h1>
+        </div>
+        <div class="header-actions">
+          <div class="role-switcher" role="group" aria-label="Role perspective">
+            <button class="role-btn active" data-role="mrm" type="button">Model Risk Manager</button>
+            <button class="role-btn" data-role="developer" type="button">Developer</button>
+            <button class="role-btn" data-role="validator" type="button">Validator</button>
+          </div>
+          <div class="view-toggle" role="group" aria-label="Content perspective toggle">
+            <span class="view-tag active" id="view-tag-your">Your View</span>
+            <button
+              id="examiner-view-toggle"
+              class="view-switch"
+              type="button"
+              aria-pressed="false"
+              aria-label="Switch to examiner perspective"
+            >
+              <span class="view-switch-knob" aria-hidden="true"></span>
+            </button>
+            <span class="view-tag" id="view-tag-examiner">Examiner View</span>
+          </div>
+        </div>
+      </div>
+      <div id="examiner-lens-indicator" class="examiner-lens-indicator" aria-live="polite">Examiner lens active</div>
+      <nav class="section-nav" aria-label="Section navigation">
+        <a href="#orientation" class="nav-link active">Orientation</a>
+        <a href="#gray-space" class="nav-link">Gray Space</a>
+        <a href="#foundations" class="nav-link">Foundations</a>
+        <a href="#agentic" class="nav-link">Agentic AI</a>
+        <a href="#lifecycle" class="nav-link">Lifecycle</a>
+        <a href="#peers" class="nav-link">Peer Models</a>
+        <a href="#evidence" class="nav-link">Evidence</a>
+        <a href="#scenarios" class="nav-link">Scenarios</a>
+        <a href="#next-steps" class="nav-link">Takeaways</a>
+      </nav>
+    </header>
+
+    <main class="page">
+      <!-- =========================================
+           SECTION 1: ORIENTATION
+           ========================================= -->
+      <section id="orientation" data-section class="section reveal show">
+        <div class="hero-card">
+          <p class="section-kicker">For FHLB institutions</p>
+          <h2>From policy to proof: governing models, AI, and analytics with confidence</h2>
+          <p>
+            This guide supports today's discussion on how agentic and semi-autonomous AI governance fits into
+            model risk frameworks — especially the gray space between models and applications.
+          </p>
+          <div class="role-context" id="orientation-role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> Ownership of governance, where validation responsibilities begin and end, and what examiners focus on.</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> What governance expects from development teams — documentation, handoffs, and building validation-ready models.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> Where validation boundaries lie, what "good enough evidence" looks like, and how to challenge AI/ML models effectively.</p>
+          </div>
+          <div class="hero-actions">
+            <button id="btn-start" class="btn btn-primary">Begin discussion</button>
+            <button id="btn-print-full" class="btn btn-outline">Export full session (PDF)</button>
+            <button id="btn-print-exec" class="btn btn-outline">Export executive summary (PDF)</button>
+          </div>
+        </div>
+        <aside class="boundary-statement">
+          <h3>Boundary statement</h3>
+          <p>
+            This application is an educational launchpad for navigating model and AI governance topics. It is not
+            a system of record or compliance certification tool. No data is persisted by default.
+          </p>
+        </aside>
+      </section>
+
+      <!-- =========================================
+           SECTION 2: WHERE DOES MRM BEGIN? (Gray Space)
+           ========================================= -->
+      <section id="gray-space" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 2</p>
+          <h2>Where Does MRM Begin? The Gray Space Between Models and Applications</h2>
+          <p>The most contested governance question in housing finance: when does an application cross the threshold into model risk territory?</p>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> You set the classification criteria. Focus on where the boundary sits today and whether your policy covers the tools teams are actually building.</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> You build the tools that get classified. Understand the tests so you can design systems that are governance-ready from day one.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> You validate what falls in scope. Focus on which boundary tests trigger validation requirements and how to challenge edge cases.</p>
+          </div>
+        </div>
+
+        <article class="panel">
+          <h3>The MRM boundary spectrum</h3>
+          <p>Not everything that computes is a model. Not everything that uses AI is exempt from MRM. The boundary is a spectrum.</p>
+          <div class="decision-tree" id="decision-tree">
+            <div class="dt-node dt-low" data-dt-step="0">
+              <div class="dt-label">Spreadsheet</div>
+              <div class="dt-risk">Low governance</div>
+            </div>
+            <div class="dt-connector"></div>
+            <div class="dt-node dt-low" data-dt-step="1">
+              <div class="dt-label">Business Rule</div>
+              <div class="dt-risk">Policy-governed</div>
+            </div>
+            <div class="dt-connector"></div>
+            <div class="dt-node dt-medium" data-dt-step="2">
+              <div class="dt-label">Statistical Model</div>
+              <div class="dt-risk">MRM applies</div>
+            </div>
+            <div class="dt-connector dt-threshold"></div>
+            <div class="dt-node dt-high" data-dt-step="3">
+              <div class="dt-label">ML Model</div>
+              <div class="dt-risk">Full MRM scope</div>
+            </div>
+            <div class="dt-connector"></div>
+            <div class="dt-node dt-high" data-dt-step="4">
+              <div class="dt-label">AI Application</div>
+              <div class="dt-risk">Extended governance</div>
+            </div>
+            <div class="dt-connector"></div>
+            <div class="dt-node dt-critical" data-dt-step="5">
+              <div class="dt-label">Agentic System</div>
+              <div class="dt-risk">Maximum oversight</div>
+            </div>
+          </div>
+          <div class="dt-threshold-label">MRM threshold zone</div>
+        </article>
+
+        <div class="grid-two">
+          <article class="panel">
+            <h3>Boundary tests</h3>
+            <p>Four questions to determine whether something falls within MRM scope:</p>
+            <div class="role-context">
+              <p class="role-note" data-role-mrm><strong>Action:</strong> Use these tests to audit your current model inventory for classification gaps.</p>
+              <p class="role-note" data-role-developer><strong>Action:</strong> Run these tests before building — if 2+ apply, plan for MRM-grade documentation from the start.</p>
+              <p class="role-note" data-role-validator><strong>Action:</strong> Use these tests to challenge any classification decisions you're asked to validate.</p>
+            </div>
+            <div class="boundary-tests" id="boundary-tests">
+              <label class="boundary-test-item">
+                <input type="checkbox" name="boundary" value="decisions" />
+                <div>
+                  <strong>Does it materially influence decisions?</strong>
+                  <span>If the output drives credit, pricing, capital, or member-facing actions, it's likely in scope.</span>
+                </div>
+              </label>
+              <label class="boundary-test-item">
+                <input type="checkbox" name="boundary" value="learned" />
+                <div>
+                  <strong>Is there learned behavior?</strong>
+                  <span>If parameters are estimated from data rather than set by policy, model governance likely applies.</span>
+                </div>
+              </label>
+              <label class="boundary-test-item">
+                <input type="checkbox" name="boundary" value="member-facing" />
+                <div>
+                  <strong>Is output used for member-facing action?</strong>
+                  <span>Member-impacting outputs carry higher regulatory expectations regardless of complexity.</span>
+                </div>
+              </label>
+              <label class="boundary-test-item">
+                <input type="checkbox" name="boundary" value="autonomous" />
+                <div>
+                  <strong>Is there autonomous actioning?</strong>
+                  <span>Systems that take action without human approval require the highest governance tier.</span>
+                </div>
+              </label>
+            </div>
+            <div id="boundary-result" class="detail-box">
+              <p>Check the boundary tests above to see the governance classification result.</p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h3>FHLB classification examples</h3>
+            <p>How would these common FHLB tools be classified?</p>
+            <div class="classification-examples">
+              <div class="class-example" data-class="gray">
+                <h4>Vendor collateral valuation API</h4>
+                <div class="class-tags">
+                  <span class="class-tag tag-gray">Gray zone</span>
+                  <span class="class-tag tag-note">Vendor model, learned behavior, member-facing</span>
+                </div>
+                <p>Externally developed, opaque methodology, directly impacts collateral decisions. Most frameworks classify this as in-scope for MRM even though the institution didn't build it.</p>
+                <details>
+                  <summary>Framework interpretations</summary>
+                  <p><strong>FHFA:</strong> In-scope. Third-party models require equivalent governance.</p>
+                  <p><strong>SR 11-7:</strong> In-scope. "Model" definition covers vendor-provided quantitative methods used for decision-making.</p>
+                  <p><strong>NIST AI RMF:</strong> Map function applies — document context, stakeholders, and potential impacts regardless of origin.</p>
+                </details>
+              </div>
+              <div class="class-example" data-class="gray">
+                <h4>LLM loan-file summarizer</h4>
+                <div class="class-tags">
+                  <span class="class-tag tag-gray">Gray zone</span>
+                  <span class="class-tag tag-note">AI application, no direct decisioning</span>
+                </div>
+                <p>Uses generative AI but doesn't directly make decisions. However, if summaries influence underwriting judgments, it may cross the MRM threshold. This is the frontier of the debate.</p>
+                <details>
+                  <summary>Framework interpretations</summary>
+                  <p><strong>FHFA:</strong> Emerging guidance — likely requires governance even if not traditional MRM.</p>
+                  <p><strong>SR 11-7:</strong> May not meet the strict "model" definition, but supervisory expectations are expanding.</p>
+                  <p><strong>NIST AI RMF:</strong> In-scope for AI governance — Govern and Map functions apply.</p>
+                </details>
+              </div>
+              <div class="class-example" data-class="in-scope">
+                <h4>Advance pricing tool with embedded ML</h4>
+                <div class="class-tags">
+                  <span class="class-tag tag-inscope">In MRM scope</span>
+                  <span class="class-tag tag-note">ML model, pricing impact, member-facing</span>
+                </div>
+                <p>Directly impacts advance pricing for members. Uses machine learning to optimize rates. Clearly within MRM scope under all major frameworks.</p>
+                <details>
+                  <summary>Framework interpretations</summary>
+                  <p><strong>FHFA:</strong> Fully in-scope. Pricing models with ML require full governance.</p>
+                  <p><strong>SR 11-7:</strong> In-scope. Material pricing decisions require validated models.</p>
+                  <p><strong>NIST AI RMF:</strong> Measure and Manage functions apply with full rigor.</p>
+                </details>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <aside class="boundary-statement">
+          <h3>The ambiguity is real</h3>
+          <p>
+            FHFA, SR 11-7, and NIST AI RMF don't define "model" identically. The gray space between models and
+            applications is where most governance debates happen today — and where emerging best practices are being shaped by institutions like yours.
+          </p>
+        </aside>
+      </section>
+
+      <!-- =========================================
+           SECTION 3: FOUNDATIONS
+           ========================================= -->
+      <section id="foundations" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 3</p>
+          <h2>Why Governance Is the Control Plane — and Why Now</h2>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> Governance frameworks must be more than policy — they need tooling, accountability, and evidence to be effective.</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> Models built without governance hooks create downstream compliance burdens. Closing that gap starts with the right tooling.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> Validation is only as strong as the governance infrastructure supporting it. Weak foundations mean weak evidence.</p>
+          </div>
+        </div>
+
+        <article class="panel">
+          <h3>Explainability = 4 tests, not a philosophy</h3>
+          <p>NISTIR 8312 reframes explainability as four practical tests that can be evidenced during review.</p>
+          <div id="xai-checklist" class="xai-checklist" role="tablist" aria-label="Explainability test checklist">
+            <button type="button" class="xai-check active" data-xai-check="explanation">1. Explanation</button>
+            <button type="button" class="xai-check" data-xai-check="meaningful">2. Meaningful</button>
+            <button type="button" class="xai-check" data-xai-check="accuracy">3. Explanation Accuracy</button>
+            <button type="button" class="xai-check" data-xai-check="knowledgeLimits">4. Knowledge Limits</button>
+          </div>
+          <div id="xai-check-detail" class="detail-box">
+            <h4>Explanation</h4>
+            <p>Can reviewers see reasons or evidence for model outputs and process decisions?</p>
+          </div>
+        </article>
+
+        <div class="grid-two">
+          <article class="panel">
+            <h3>Regulatory context</h3>
+            <ul id="foundation-reg-list" class="checklist"></ul>
+            <p id="foundation-reg-note" class="reg-note"></p>
+            <p class="reg-note"><strong>Primary for FHLB:</strong> FHFA + SR 11-7. <strong>AI lens:</strong> NIST AI RMF. Other frameworks (OSFI E-23, Colorado 10-1-1, NY DFS) available as secondary references.</p>
+          </article>
+
+          <article class="panel">
+            <h3>Governance concept map</h3>
+            <p>Hover nodes for context and dependencies across models, data, ownership, controls, and evidence.</p>
+            <div id="concept-map" class="viz-shell" aria-label="Governance concept map">
+              <p style="padding: 12px; margin: 0; color: #506170">
+                Concept map loads in browser. If unavailable, use the detail panel and regulation linkage table below.
+              </p>
+            </div>
+            <p id="foundation-exam-overlay" class="exam-overlay-note" hidden>
+              Illustrative supervisory benchmark: in SR 11-7-style exams, approximately 68% of findings relate to ongoing
+              monitoring and outcomes-analysis gaps.
+            </p>
+            <div id="concept-detail" class="detail-box">
+              <h4>Models</h4>
+              <p>Model records should include purpose, assumptions, owner, validation status, and deployment context.</p>
+            </div>
+          </article>
+        </div>
+
+        <article class="panel">
+          <h3>Regulation-to-control linkage</h3>
+          <p>Reference mapping of common governance themes across major supervisory frameworks. <strong>FHFA and SR 11-7 are primary for FHLBs.</strong></p>
+          <div class="table-wrap">
+            <table id="regulation-linkage-table">
+              <thead>
+                <tr>
+                  <th>Regulation</th>
+                  <th>Inventory & ownership</th>
+                  <th>Validation & testing</th>
+                  <th>Monitoring & drift</th>
+                  <th>Traceability & evidence</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="reg-primary"><td>FHFA</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+                <tr class="reg-primary"><td>SR 11-7</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+                <tr class="reg-supporting"><td>NIST AI RMF 1.0</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+                <tr class="reg-secondary"><td>OSFI E-23</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+                <tr class="reg-secondary"><td>Colorado 10-1-1</td><td>Partial</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+                <tr class="reg-secondary"><td>NY DFS</td><td>Partial</td><td>Partial</td><td>Yes</td><td>Yes</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="regulation-linkage-detail" class="detail-box">
+            <p><strong>Cell details:</strong> click a linkage cell to see specific capabilities that support it.</p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Glossary, tests, and control terms</h3>
+          <p>Regulation-grounded terminology drawn from FHFA AB 2013-07, SR 11-7, and NIST AI RMF 1.0.</p>
+          <div class="grid-two">
+            <div>
+              <label class="label" for="glossary-search">Search terms</label>
+              <input id="glossary-search" type="text" placeholder="Search validation, monitoring, fairness..." />
+            </div>
+            <div>
+              <label class="label" for="glossary-category">Category</label>
+              <select id="glossary-category">
+                <option value="all">All categories</option>
+                <option value="governance">Governance</option>
+                <option value="validation">Validation and testing</option>
+                <option value="monitoring">Monitoring</option>
+                <option value="fairness">Fairness and bias</option>
+                <option value="controls">AI guardrails and controls</option>
+                <option value="evidence">Evidence and audit</option>
+              </select>
+            </div>
+          </div>
+          <div id="glossary-list" class="glossary-list"></div>
+          <div id="term-definition" class="detail-box" aria-live="polite">
+            <h4>Model risk</h4>
+            <p>Potential adverse outcomes from weak model design, implementation issues, misuse, or weak governance oversight.</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- =========================================
+           SECTION 4: AGENTIC AI SPECTRUM
+           ========================================= -->
+      <section id="agentic" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 4</p>
+          <h2>When Models Become Systems: Governing Agentic AI</h2>
+          <p>
+            Agentic AI in regulated environments is policy-bounded, monitored, and accountable. This section maps
+            governance requirements as autonomy increases.
+          </p>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> As autonomy increases, governance burden scales non-linearly. Focus on where your current framework stops being sufficient.</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> Each step up the spectrum requires new governance hooks — logging, guardrails, human-in-the-loop controls. Build them in, not on.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> Validating agentic systems requires new techniques — output testing, boundary enforcement verification, and chain-of-decision audits.</p>
+          </div>
+        </div>
+
+        <article class="panel">
+          <h3>Risk spectrum</h3>
+          <label for="risk-spectrum" class="label"
+            >Move through operating patterns
+            <span
+              class="tip-icon"
+              tabindex="0"
+              data-tip="Think of this as increasing governance burden as autonomy increases."
+              aria-label="Help for operating patterns"
+              >?</span
+            ></label
+          >
+          <input type="range" min="0" max="3" step="1" value="0" id="risk-spectrum" />
+          <div class="spectrum-labels">
+            <span>Static model</span>
+            <span>ML pipeline</span>
+            <span>Orchestrated flow</span>
+            <span>Semi-autonomous</span>
+          </div>
+          <div id="spectrum-detail" class="detail-box"></div>
+        </article>
+
+        <article class="panel">
+          <h3>FHLB examples by pattern</h3>
+          <div id="agentic-fhlb-examples" class="detail-box">
+            <p>Move the risk spectrum slider to see FHLB-specific examples for each pattern.</p>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3 id="agentic-lens-title">Supervisory lens</h3>
+          <p id="agentic-lens-copy" class="reg-note">Perspective-aware risk and documentation expectations.</p>
+          <div id="agentic-risk-rating" class="detail-box"></div>
+          <div class="grid-two">
+            <div id="agentic-evidence-burden" class="detail-box"></div>
+            <div class="detail-box">
+              <h4 id="agentic-question-title">Regulatory challenge questions</h4>
+              <ul id="agentic-question-list" class="checklist"></ul>
+            </div>
+          </div>
+          <div class="grid-two">
+            <div id="risk-financial-impact" class="detail-box">
+              <p>Financial impact profile updates with the slider.</p>
+            </div>
+            <div id="risk-compliance-impact" class="detail-box">
+              <p>Compliance impact profile updates with the slider.</p>
+            </div>
+          </div>
+          <div id="risk-impact-bars" class="poll-results"></div>
+        </article>
+
+        <article class="panel">
+          <h3>Required governance controls</h3>
+          <p class="reg-note">Updates based on selected operating pattern.</p>
+          <ul id="required-controls-list" class="checklist">
+            <li>Move the slider to view controls.</li>
+          </ul>
+          <h4>Knowledge limits and confidence boundaries</h4>
+          <ul id="confidence-boundary-list" class="checklist">
+            <li>Move the slider to view confidence controls.</li>
+          </ul>
+          <h4>Override governance and exception traceability</h4>
+          <ul id="override-governance-list" class="checklist">
+            <li>Move the slider to view override governance expectations.</li>
+          </ul>
+          <h4>Key evidence artifacts</h4>
+          <ul id="slider-evidence-artifacts-list" class="checklist">
+            <li>Move the slider to view expected artifacts.</li>
+          </ul>
+          <details class="sas-drawer">
+            <summary>Operationalize with SAS</summary>
+            <ul id="spectrum-sas-list" class="checklist">
+              <li>Move the slider to view mapped capabilities.</li>
+            </ul>
+          </details>
+          <h4 id="role-agentic-heading">Role focus</h4>
+          <div id="role-agentic-focus" class="detail-box compact-box">
+            <p>Select a role to view role-specific priorities for this autonomy level.</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- =========================================
+           SECTION 5: LIFECYCLE + VALIDATION BOUNDARIES
+           ========================================= -->
+      <section id="lifecycle" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 5</p>
+          <h2>Lifecycle Governance and Validation Boundaries</h2>
+          <p id="lifecycle-priority-note" class="reg-note"></p>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> You own the governance framework — ensure accountability is clear at every stage and escalation paths work.</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> Understand what's expected of you at each stage — documentation, handoffs, and building validation-ready artifacts.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> Know where your responsibilities begin and end, and what "effective challenge" means at each lifecycle stage.</p>
+          </div>
+        </div>
+
+        <div class="lifecycle-layout">
+          <article class="panel">
+            <h3>Lifecycle stages</h3>
+            <div id="lifecycle-buttons" class="lifecycle-buttons" role="tablist"></div>
+          </article>
+          <article class="panel sticky-panel">
+            <h3 id="stage-title">Design & Build</h3>
+            <p id="lifecycle-mode-note" class="reg-note"></p>
+            <div id="stage-detail" class="stage-detail"></div>
+            <div id="role-lifecycle-focus" class="detail-box compact-box">
+              <p>Role-specific lifecycle focus will appear here.</p>
+            </div>
+          </article>
+        </div>
+
+        <!-- RACI Matrix -->
+        <article class="panel">
+          <h3>Validation RACI matrix</h3>
+          <p>Who is responsible, accountable, consulted, and informed across the model lifecycle?</p>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your focus:</strong> You own the governance framework — ensure accountability is clear and escalation paths work.</p>
+            <p class="role-note" data-role-developer><strong>Your focus:</strong> Understand what's expected of you at each stage — documentation, handoffs, and building validation-ready artifacts.</p>
+            <p class="role-note" data-role-validator><strong>Your focus:</strong> Know where your responsibilities begin and end, and what "effective challenge" means at each stage.</p>
+          </div>
+          <div class="table-wrap">
+            <table class="raci-table" id="raci-table">
+              <thead>
+                <tr>
+                  <th>Lifecycle Stage</th>
+                  <th>Developer</th>
+                  <th>Model Owner</th>
+                  <th>Ind. Validator</th>
+                  <th>MRM</th>
+                  <th>Audit</th>
+                  <th>Board/Committee</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Design & Build</td>
+                  <td><span class="raci-r">R</span></td>
+                  <td><span class="raci-a">A</span></td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-i">I</span></td>
+                  <td><span class="raci-i">I</span></td>
+                </tr>
+                <tr>
+                  <td>Validation & Testing</td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-a">A</span></td>
+                  <td><span class="raci-r">R</span></td>
+                  <td><span class="raci-r">R</span></td>
+                  <td><span class="raci-i">I</span></td>
+                  <td><span class="raci-i">I</span></td>
+                </tr>
+                <tr>
+                  <td>Approval & Deployment</td>
+                  <td><span class="raci-r">R</span></td>
+                  <td><span class="raci-a">A</span></td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-a">A</span></td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-a">A</span></td>
+                </tr>
+                <tr>
+                  <td>Ongoing Monitoring</td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-r">R</span></td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-a">A</span></td>
+                  <td><span class="raci-i">I</span></td>
+                  <td><span class="raci-i">I</span></td>
+                </tr>
+                <tr>
+                  <td>Update or Retirement</td>
+                  <td><span class="raci-r">R</span></td>
+                  <td><span class="raci-a">A</span></td>
+                  <td><span class="raci-r">R</span></td>
+                  <td><span class="raci-a">A</span></td>
+                  <td><span class="raci-c">C</span></td>
+                  <td><span class="raci-i">I</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="raci-legend">
+            <span class="raci-r">R</span> Responsible
+            <span class="raci-a">A</span> Accountable
+            <span class="raci-c">C</span> Consulted
+            <span class="raci-i">I</span> Informed
+          </p>
+        </article>
+
+        <!-- Validation Boundary Scenarios -->
+        <article class="panel">
+          <h3>Validation boundary scenarios</h3>
+          <p>Common situations where validation responsibilities are unclear — and how they should be resolved.</p>
+          <div class="validation-scenarios">
+            <div class="val-scenario">
+              <h4>Vendor model: who validates?</h4>
+              <p><strong>Scenario:</strong> A vendor provides a collateral valuation model with limited documentation.</p>
+              <p><strong>Answer:</strong> The deploying institution owns validation. Vendor IP claims do not reduce governance requirements. Independent validation must cover conceptual soundness, performance on your data, and ongoing monitoring.</p>
+              <div class="val-delta">
+                <strong>Traditional vs. AI/ML:</strong> AI/ML vendor models require additional scrutiny on explainability, fairness testing, and data drift monitoring that traditional vendor models may not.
+              </div>
+            </div>
+            <div class="val-scenario">
+              <h4>Developer departure: who owns monitoring?</h4>
+              <p><strong>Scenario:</strong> The model developer leaves the institution. Monitoring alerts continue but no one understands the model deeply enough to interpret them.</p>
+              <p><strong>Answer:</strong> The model owner (not the developer) is accountable for monitoring continuity. Documentation must be sufficient for a new team member to operate and interpret the model. Knowledge transfer is a governance requirement, not optional.</p>
+              <div class="val-delta">
+                <strong>Traditional vs. AI/ML:</strong> ML models are harder to transfer due to pipeline complexity, feature engineering dependencies, and hyperparameter sensitivity. Documentation standards must be higher.
+              </div>
+            </div>
+            <div class="val-scenario">
+              <h4>Model repurposing: when does revalidation trigger?</h4>
+              <p><strong>Scenario:</strong> A prepayment model validated for portfolio management is proposed for use in member pricing.</p>
+              <p><strong>Answer:</strong> Change of use case triggers revalidation regardless of model changes. The original validation was for a different purpose, different materiality tier, and different risk profile. A new validation cycle is required.</p>
+              <div class="val-delta">
+                <strong>Traditional vs. AI/ML:</strong> ML models may behave differently on new populations, making repurposing riskier. Fairness implications may also change with new use contexts.
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- =========================================
+           SECTION 6: PEER OPERATING MODELS (FHLB Context)
+           ========================================= -->
+      <section id="peers" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 6</p>
+          <h2>How FHLB Institutions Allocate Governance Responsibility</h2>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> Compare operating models to find the right balance between control, speed, and team capacity for your institution.</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> The operating model determines who you report to and how governance touches your workflow. A federated model gives more autonomy; centralized means more process.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> The operating model affects validation independence. In a federated model, validators may sit closer to developers — watch for independence risks.</p>
+          </div>
+        </div>
+
+        <div class="grid-two">
+          <article class="panel">
+            <div class="tabs" role="tablist">
+              <button class="tab active" data-peer-tab="federated">Federated</button>
+              <button class="tab" data-peer-tab="centralized">Centralized</button>
+              <button class="tab" data-peer-tab="hybrid">Hybrid</button>
+            </div>
+            <div id="peer-content" class="peer-content"></div>
+            <div class="inline-actions">
+              <button id="toggle-lod-view" class="btn btn-outline" type="button">Show 3 Lines of Defense Overlay</button>
+            </div>
+            <div id="lod-overlay" class="detail-box" hidden>
+              <p>Enable the overlay to view role allocation by operating model.</p>
+            </div>
+            <div id="challenge-workflow" class="detail-box">
+              <p>Operating model-specific effective challenge workflow appears here.</p>
+            </div>
+            <div class="detail-box">
+              <h4>Compliance strength comparison</h4>
+              <div id="ownership-reg-graph" class="ownership-graph"></div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h3>Framework comparison</h3>
+            <p>Select a framework to see how governance models perform by control dimension.</p>
+            <label class="label" for="regulation-select"
+              >Framework
+              <span
+                class="tip-icon"
+                tabindex="0"
+                data-tip="For FHLBs, FHFA supervision is primary. SR 11-7 and NIST provide complementary guidance."
+                aria-label="Help for framework selection"
+                >?</span
+              ></label
+            >
+            <select id="regulation-select">
+              <option value="FHFA">FHFA (Primary)</option>
+              <option value="SR 11-7">SR 11-7 (Primary)</option>
+              <option value="NIST AI RMF 1.0">NIST AI RMF (AI Lens)</option>
+              <option value="OSFI E-23">OSFI E-23 (Reference)</option>
+              <option value="Colorado 10-1-1">Colorado 10-1-1 (Reference)</option>
+              <option value="NY DFS">NY DFS (Reference)</option>
+            </select>
+            <div class="detail-box">
+              <h4>Regulation dimension impact</h4>
+              <div id="regulatory-bars" class="poll-results"></div>
+            </div>
+            <p id="regulatory-note" class="disclaimer"></p>
+          </article>
+        </div>
+
+        <!-- FHLB Operating Constraints -->
+        <article class="panel">
+          <h3>FHLB operating realities</h3>
+          <div class="grid-two">
+            <div>
+              <h4>Common constraints</h4>
+              <ul class="checklist">
+                <li><strong>Small MRM teams:</strong> Many FHLBs have 2-5 people covering all model risk. Prioritization and automation are essential.</li>
+                <li><strong>Vendor-model reliance:</strong> Significant model inventory is vendor-provided, requiring governance for models you didn't build.</li>
+                <li><strong>Shared-service governance:</strong> Some governance functions operate across the FHLB system, creating coordination complexity.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>FHLB use-case library</h4>
+              <div class="use-case-grid" id="fhlb-use-cases">
+                <button class="use-case-chip" data-uc="prepayment" type="button">Prepayment modeling</button>
+                <button class="use-case-chip" data-uc="collateral" type="button">Collateral valuation</button>
+                <button class="use-case-chip" data-uc="credit" type="button">Member credit risk</button>
+                <button class="use-case-chip" data-uc="pricing" type="button">Advance pricing</button>
+                <button class="use-case-chip" data-uc="alm" type="button">ALM / IRR</button>
+                <button class="use-case-chip" data-uc="cecl" type="button">CECL / ACL</button>
+              </div>
+              <div id="use-case-detail" class="detail-box">
+                <p>Select a use case to see governance considerations specific to that model type.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Peer Discussion Prompts -->
+        <article class="panel">
+          <h3>Peer discussion prompts</h3>
+          <p class="reg-note">These are conversation starters, not benchmarks. Every institution's journey is different.</p>
+          <div class="discussion-prompts" id="peer-discussion-prompts">
+            <div class="prompt-card">
+              <p>"How does your institution define the boundary between a tool and a model? Where have you drawn the line?"</p>
+            </div>
+            <div class="prompt-card">
+              <p>"When a vendor model has limited documentation, what's your minimum governance threshold before deployment?"</p>
+            </div>
+            <div class="prompt-card">
+              <p>"How do you handle model governance with a small MRM team? What have you automated vs. kept manual?"</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- =========================================
+           SECTION 7: EVIDENCE IN PRACTICE
+           ========================================= -->
+      <section id="evidence" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 7</p>
+          <h2>Evidence in Practice: What's "Good Enough"?</h2>
+          <p>The pragmatic question every MRM team faces: what level of evidence is sufficient, defensible, and proportionate?</p>
+          <p class="reg-note">Supervisor lens: reviews increasingly trace the full chain from design -> development -> deployment -> monitoring.</p>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> Define the evidence standards for each tier. Focus on what "good enough" means — and what it doesn't.</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> You produce most of the evidence. Understand what's expected so you can build it into your development workflow, not bolt it on later.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> You evaluate evidence quality. Focus on green vs. red flags and what constitutes genuine effective challenge.</p>
+          </div>
+        </div>
+
+        <!-- Tiered Evidence Framework -->
+        <article class="panel">
+          <h3>Tiered evidence framework</h3>
+          <p>Not all models require the same depth of evidence. Match documentation effort to materiality and risk.</p>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Action:</strong> Map your current model inventory to these tiers. Identify any Tier 1 models that lack Tier 1-grade evidence.</p>
+            <p class="role-note" data-role-developer><strong>Action:</strong> Check which tier your models fall into. Your documentation effort should match — Tier 3 doesn't need a 40-page validation report.</p>
+            <p class="role-note" data-role-validator><strong>Action:</strong> Calibrate your validation depth to the tier. Challenge Tier 1 rigorously; for Tier 3, a structured memo with test results is sufficient.</p>
+          </div>
+          <div class="evidence-tiers">
+            <div class="evidence-tier tier-1">
+              <div class="tier-header">
+                <span class="tier-badge tier-badge-1">Tier 1</span>
+                <h4>Critical models</h4>
+              </div>
+              <p class="tier-desc">Capital, pricing, or member-impacting decisions. Highest materiality.</p>
+              <div class="tier-examples">
+                <strong>FHLB examples:</strong> ALM/IRR models, CECL/ACL, advance pricing
+              </div>
+              <div class="tier-evidence">
+                <h4>What's expected</h4>
+                <ul>
+                  <li>Full independent validation with effective challenge documentation</li>
+                  <li>Quarterly performance monitoring with documented threshold responses</li>
+                  <li>Board-level reporting on model performance and governance status</li>
+                  <li>Complete data lineage and reproducibility evidence</li>
+                  <li>Fairness/bias testing where applicable</li>
+                </ul>
+              </div>
+              <div class="tier-evidence">
+                <h4>What's overkill</h4>
+                <ul>
+                  <li>Daily monitoring reports for models that update quarterly</li>
+                  <li>Re-running full validation for minor parameter updates</li>
+                </ul>
+              </div>
+            </div>
+            <div class="evidence-tier tier-2">
+              <div class="tier-header">
+                <span class="tier-badge tier-badge-2">Tier 2</span>
+                <h4>Material models</h4>
+              </div>
+              <p class="tier-desc">Operational or analytical models with moderate business impact.</p>
+              <div class="tier-examples">
+                <strong>FHLB examples:</strong> Member credit risk scoring, collateral valuation (non-pricing)
+              </div>
+              <div class="tier-evidence">
+                <h4>What's expected</h4>
+                <ul>
+                  <li>Independent validation with documented challenge — can be lighter than Tier 1</li>
+                  <li>Semi-annual performance reviews with drift monitoring</li>
+                  <li>Documented owner accountability and issue resolution</li>
+                  <li>Key data quality checks and input monitoring</li>
+                </ul>
+              </div>
+              <div class="tier-evidence">
+                <h4>What's sufficient (not overkill)</h4>
+                <ul>
+                  <li>A well-structured validation memo with test results beats a 40-page report with boilerplate</li>
+                  <li>Exception-based monitoring (alert when thresholds breach) vs. comprehensive dashboards</li>
+                </ul>
+              </div>
+            </div>
+            <div class="evidence-tier tier-3">
+              <div class="tier-header">
+                <span class="tier-badge tier-badge-3">Tier 3</span>
+                <h4>Limited-impact models</h4>
+              </div>
+              <p class="tier-desc">Low-materiality or supporting models with limited direct decision impact.</p>
+              <div class="tier-examples">
+                <strong>FHLB examples:</strong> Prepayment assumptions for non-material portfolios, internal analytics tools
+              </div>
+              <div class="tier-evidence">
+                <h4>What's expected</h4>
+                <ul>
+                  <li>Documented purpose, owner, and basic performance assessment</li>
+                  <li>Annual review with change-triggered revalidation</li>
+                  <li>Inventory registration with risk tier justification</li>
+                </ul>
+              </div>
+              <div class="tier-evidence">
+                <h4>What's sufficient</h4>
+                <ul>
+                  <li>A documented challenge memo with test results — no full validation report needed</li>
+                  <li>Annual owner attestation with performance summary</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Green Flags vs Red Flags -->
+        <div class="grid-two">
+          <article class="panel flag-panel flag-green">
+            <h3>Green flags: what examiners like to see</h3>
+            <p class="role-note" data-role-mrm><strong>Benchmark:</strong> How many of these are true for your institution today?</p>
+            <p class="role-note" data-role-developer><strong>Your role:</strong> You produce 4 of these 7 — documentation, monitoring, evidence assembly, and lineage.</p>
+            <p class="role-note" data-role-validator><strong>Your role:</strong> "Genuine effective challenge" is your direct output. The rest are inputs you depend on.</p>
+            <ul class="flag-list">
+              <li>Model inventory is complete, current, and includes risk tiering</li>
+              <li>Validation reports show genuine effective challenge, not rubber-stamping</li>
+              <li>Monitoring thresholds are tied to documented escalation actions</li>
+              <li>Override governance exists with pre-defined authority levels</li>
+              <li>Evidence can be assembled within 48 hours of request</li>
+              <li>Owner accountability is clear — one name, not a committee</li>
+              <li>Post-event reviews exist and show the institution learned</li>
+            </ul>
+          </article>
+          <article class="panel flag-panel flag-red">
+            <h3>Red flags: common examiner findings</h3>
+            <p class="role-note" data-role-mrm><strong>Risk check:</strong> Any of these present in your current environment? Each is a potential MRIA trigger.</p>
+            <p class="role-note" data-role-developer><strong>Your exposure:</strong> Inventory gaps and scattered evidence often originate in development workflows.</p>
+            <p class="role-note" data-role-validator><strong>Your exposure:</strong> "No issues" validation reports without challenge evidence reflect directly on validation quality.</p>
+            <ul class="flag-list">
+              <li>Inventory gaps — models in production that aren't in the registry</li>
+              <li>Validation reports that confirm "no issues" without evidence of challenge</li>
+              <li>Monitoring alerts that fire but no documented response or escalation</li>
+              <li>Overrides without documentation or risk acceptance signatures</li>
+              <li>Evidence assembly takes weeks — artifacts scattered across systems</li>
+              <li>Ownership is ambiguous — "the team" owns it, but no individual is accountable</li>
+              <li>No post-event documentation for material model events</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- Common Findings and MRIA Triggers -->
+        <article class="panel">
+          <h3>Common findings and remediation patterns</h3>
+          <p>Typical examination findings at FHLB institutions and what "good" remediation looks like.</p>
+          <div class="findings-grid" id="findings-grid">
+            <div class="finding-card">
+              <h4>Finding: Incomplete model inventory</h4>
+              <p class="finding-trigger"><strong>MRIA trigger:</strong> Models in production not registered in inventory</p>
+              <p><strong>Typical remediation:</strong> 30-day sprint to catalog all models, assign owners, and establish risk tiers. Followed by quarterly inventory attestation process.</p>
+            </div>
+            <div class="finding-card">
+              <h4>Finding: Weak effective challenge</h4>
+              <p class="finding-trigger"><strong>MRIA trigger:</strong> Validation reports lack evidence of independent challenge</p>
+              <p><strong>Typical remediation:</strong> Strengthen validation templates to require documented disagreements, alternative analyses, and challenge resolution records.</p>
+            </div>
+            <div class="finding-card">
+              <h4>Finding: Monitoring without action</h4>
+              <p class="finding-trigger"><strong>MRIA trigger:</strong> Drift alerts fire but no escalation or remediation evidence exists</p>
+              <p><strong>Typical remediation:</strong> Link monitoring thresholds to explicit escalation protocols with named owners and required response timelines.</p>
+            </div>
+            <div class="finding-card">
+              <h4>Finding: Vendor model governance gaps</h4>
+              <p class="finding-trigger"><strong>MRIA trigger:</strong> Third-party models lack independent validation by the institution</p>
+              <p><strong>Typical remediation:</strong> Establish vendor model governance policy requiring conceptual soundness review, independent performance testing on institution data, and ongoing monitoring.</p>
+            </div>
+          </div>
+        </article>
+
+        <!-- Pain-point diagnostic (kept but restructured) -->
+        <div class="grid-two">
+          <article class="panel">
+            <h3 id="pain-panel-title">Pain-point diagnostic</h3>
+            <p id="pain-panel-copy">Identify current governance friction points to receive targeted guidance.</p>
+            <form id="pain-form" class="stack-form">
+              <label class="option-line pain-option" data-pain="inventory"><input type="checkbox" name="pain" value="inventory" /> <span class="pain-text">Inventory is fragmented across teams or tools</span></label>
+              <label class="option-line pain-option" data-pain="validation"><input type="checkbox" name="pain" value="validation" /> <span class="pain-text">Validation evidence is inconsistent or delayed</span></label>
+              <label class="option-line pain-option" data-pain="monitoring"><input type="checkbox" name="pain" value="monitoring" /> <span class="pain-text">Monitoring and drift alerts are not tied to policy actions</span></label>
+              <label class="option-line pain-option" data-pain="fairness"><input type="checkbox" name="pain" value="fairness" /> <span class="pain-text">Fairness and bias testing is manual or non-repeatable</span></label>
+              <label class="option-line pain-option" data-pain="audit"><input type="checkbox" name="pain" value="audit" /> <span class="pain-text">Audit requests require manual evidence compilation</span></label>
+              <label class="option-line pain-option" data-pain="lineage"><input type="checkbox" name="pain" value="lineage" /> <span class="pain-text">Data-to-model-to-decision lineage is incomplete</span></label>
+              <label class="option-line pain-option" data-pain="board"><input type="checkbox" name="pain" value="board" /> <span class="pain-text">Board and committee oversight evidence is hard to prove quickly</span></label>
+            </form>
+            <label class="label" for="priority-regulation"
+              >Primary regulatory lens
+              <span
+                class="tip-icon"
+                tabindex="0"
+                data-tip="This lens prioritizes guidance; it does not replace legal or compliance review."
+                aria-label="Help for primary regulatory lens"
+                >?</span
+              ></label
+            >
+            <select id="priority-regulation">
+              <option value="FHFA">FHFA</option>
+              <option value="SR 11-7">SR 11-7</option>
+              <option value="NIST AI RMF 1.0">NIST AI RMF 1.0</option>
+            </select>
+            <div class="inline-actions">
+              <button id="btn-guidance-export" class="btn btn-outline" type="button">Export guidance plan</button>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h3 id="guidance-panel-title">Guided compliance pathway</h3>
+            <p id="guidance-panel-copy">Focused actions based on selected pain points and regulatory lens.</p>
+            <div class="grid-two section6-grid">
+              <div id="guidance-plan" class="detail-box compact-box">
+                <p><strong>Guidance:</strong> Select pain points to generate a tailored action plan.</p>
+              </div>
+              <div id="sas-functional-map" class="detail-box compact-box">
+                <p><strong>Operationalization options:</strong> Select pain points to view capability-level mappings.</p>
+              </div>
+            </div>
+            <div id="board-evidence-output" class="detail-box compact-box">
+              <p><strong>Board evidence output:</strong> Select pain points to generate board-ready oversight artifacts.</p>
+            </div>
+            <div id="role-guidance-focus" class="detail-box compact-box">
+              <p><strong>Role priorities:</strong> Select pain points to view role-specific execution guidance.</p>
+            </div>
+            <h4 id="exam-sequence-title">Examiner-ready evidence sequence</h4>
+            <ol id="exam-sequence" class="checklist compact-sequence">
+              <li>Sequence will update based on selected regulatory lens.</li>
+            </ol>
+            <div id="mria-signals" class="detail-box">
+              <p><strong>MRIA signal detector:</strong> Select red flags to evaluate potential escalation combinations.</p>
+            </div>
+            <p class="disclaimer">
+              This tool does not determine compliance or regulatory adequacy.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- =========================================
+           SECTION 8: INTERACTIVE SCENARIOS
+           ========================================= -->
+      <section id="scenarios" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 8</p>
+          <h2>Test Your Governance Muscle</h2>
+          <p>Work through realistic governance scenarios, make decisions at each step, and see how examiners would evaluate your choices.</p>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your lens:</strong> Focus on governance design decisions — would your current framework handle these situations?</p>
+            <p class="role-note" data-role-developer><strong>Your lens:</strong> Focus on how your technical decisions affect governance outcomes — documentation, monitoring, and handoffs.</p>
+            <p class="role-note" data-role-validator><strong>Your lens:</strong> Focus on what evidence you'd need and whether the governance choices are defensible under scrutiny.</p>
+          </div>
+        </div>
+
+        <div id="scenario-tabs" class="tabs" role="tablist"></div>
+
+        <article id="scenario-workspace" class="panel" style="display:none">
+          <div id="scenario-header">
+            <h3 id="scenario-title"></h3>
+            <p id="scenario-subtitle" class="reg-note"></p>
+          </div>
+          <div id="scenario-context" class="detail-box"></div>
+
+          <div id="scenario-step-bar" class="scenario-steps-bar"></div>
+
+          <div id="scenario-step-content">
+            <h4 id="scenario-step-title"></h4>
+            <p id="scenario-step-narrative"></p>
+            <p id="scenario-step-question" style="font-weight:600"></p>
+          </div>
+
+          <div id="scenario-choices" class="scenario-choice-grid"></div>
+
+          <div id="scenario-feedback" class="grid-two" style="display:none">
+            <div id="scenario-consequence" class="detail-box"></div>
+            <aside id="scenario-examiner" class="boundary-statement">
+              <h3>Examiner commentary</h3>
+              <p id="scenario-examiner-text"></p>
+            </aside>
+          </div>
+
+          <div id="scenario-score-panel" style="margin-top:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <strong>Defensibility score</strong>
+              <span id="scenario-score-badge" class="band-badge band-good">0</span>
+            </div>
+            <div class="metric-bar" style="margin-top:6px">
+              <span id="scenario-score-bar" class="score-good" style="width:0%;transition:width 0.4s ease"></span>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <button id="scenario-next-btn" class="btn btn-primary" type="button" style="display:none">Next step</button>
+            <button id="scenario-restart-btn" class="btn btn-outline" type="button" style="display:none">Restart scenario</button>
+            <label id="scenario-best-practice-toggle" style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+              <input type="checkbox" id="scenario-bp-checkbox" /> Show best practice path
+            </label>
+          </div>
+        </article>
+
+        <article id="scenario-results" class="panel" style="display:none">
+          <h3>Scenario Results</h3>
+          <div id="scenario-evidence-map"></div>
+          <hr />
+          <h4>Decision Summary</h4>
+          <div id="scenario-decision-summary"></div>
+          <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+            <button id="scenario-export-pdf" class="btn btn-primary" type="button">Export as PDF</button>
+            <button id="scenario-export-txt" class="btn btn-outline" type="button">Export as text</button>
+          </div>
+        </article>
+      </section>
+
+      <!-- =========================================
+           SECTION 9: TAKEAWAYS & DISCUSSION PROMPTS
+           ========================================= -->
+      <section id="next-steps" data-section class="section reveal">
+        <div class="section-heading">
+          <p class="section-kicker">Section 9</p>
+          <h2>Takeaways and Discussion Prompts</h2>
+          <div class="role-context">
+            <p class="role-note" data-role-mrm><strong>Your takeaway:</strong> Leave with a clear 30/60/90-day governance roadmap and defined ownership for the top 3 priority actions.</p>
+            <p class="role-note" data-role-developer><strong>Your takeaway:</strong> Leave knowing what governance artifacts you need to produce, what "validation-ready" means for your models, and your documentation obligations.</p>
+            <p class="role-note" data-role-validator><strong>Your takeaway:</strong> Leave with clarity on validation scope, evidence standards by tier, and what "effective challenge" looks like in practice.</p>
+          </div>
+        </div>
+        <div class="grid-two">
+          <article class="panel">
+            <h3>Session outputs</h3>
+            <ul class="checklist">
+              <li>Priority guidance plan mapped to selected regulations</li>
+              <li>Recommended 30/60/90-day governance roadmap</li>
+              <li>Exportable executive and working-session summaries</li>
+            </ul>
+            <h4>Recommended 30/60/90-day roadmap</h4>
+            <div id="roadmap" class="detail-box">
+              <p><strong>30 days:</strong> Define baseline governance scope and accountable owners.</p>
+              <p><strong>60 days:</strong> Operationalize controls and close highest-risk evidence gaps.</p>
+              <p><strong>90 days:</strong> Validate readiness with structured examiner-style review.</p>
+            </div>
+            <h4>Auto-generated action summary</h4>
+            <div id="action-summary" class="detail-box">
+              <p><strong>Top priority:</strong> Establish a consistent model inventory and evidence pathway.</p>
+            </div>
+            <h4>AI use inventory (discussion output)</h4>
+            <p class="reg-note">Use this as a workshop register of where AI/model logic is used and where evidence gaps exist.</p>
+            <div class="table-wrap">
+              <table id="ai-use-inventory-table">
+                <thead>
+                  <tr>
+                    <th>Use case</th>
+                    <th>Owner</th>
+                    <th>Boundary status</th>
+                    <th>Tier</th>
+                    <th>Validation</th>
+                    <th>Monitoring</th>
+                    <th>Evidence readiness</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td colspan="7">Inventory populates from selected FHLB use cases.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="inline-actions">
+              <button id="btn-export-inventory" class="btn btn-outline" type="button">Export AI use inventory</button>
+            </div>
+            <label class="label" for="discussion-notes">Discussion notes</label>
+            <textarea
+              id="discussion-notes"
+              rows="8"
+              placeholder="Capture key decisions, ownership actions, and follow-up items..."
+            ></textarea>
+          </article>
+          <article class="panel">
+            <h3>Discussion prompts for the room</h3>
+            <p class="reg-note">Use these to structure your table discussion. No right answers — the value is in the conversation.</p>
+            <div id="role-next-steps-focus" class="detail-box compact-box">
+              <p><strong>Role takeaways:</strong> Role-specific outputs and prompts will appear here.</p>
+            </div>
+            <div class="discussion-prompts" id="discussion-prompts">
+              <div class="prompt-card">
+                <span class="prompt-number">1</span>
+                <p>"Where is your institution's biggest gap: inventory completeness, validation depth, monitoring effectiveness, or evidence readiness?"</p>
+              </div>
+              <div class="prompt-card">
+                <span class="prompt-number">2</span>
+                <p>"How should governance change for AI/ML models vs. traditional statistical models? Is a separate framework needed, or can the existing one stretch?"</p>
+              </div>
+              <div class="prompt-card">
+                <span class="prompt-number">3</span>
+                <p>"If your examiner showed up tomorrow and asked for your model inventory and validation evidence for your top 5 models, how long would it take to produce?"</p>
+              </div>
+              <div class="prompt-card">
+                <span class="prompt-number">4</span>
+                <p>"What's the one governance improvement that would give your institution the most defensibility per dollar spent?"</p>
+              </div>
+              <div class="prompt-card">
+                <span class="prompt-number">5</span>
+                <p>"How do you handle the tension between speed-to-market for new models and governance rigor? Where have you found the right balance?"</p>
+              </div>
+            </div>
+            <h4>Implementation focus options</h4>
+            <p>Choose the likely first execution track for follow-up planning.</p>
+            <form id="implementation-form" class="stack-form">
+              <label class="option-line"><input type="radio" name="track" value="control-design" checked /> Control design and policy alignment</label>
+              <label class="option-line"><input type="radio" name="track" value="platform-setup" /> Platform setup and workflow enablement</label>
+              <label class="option-line"><input type="radio" name="track" value="validation-modernization" /> Validation and monitoring modernization</label>
+              <label class="option-line"><input type="radio" name="track" value="exam-readiness" /> Examiner evidence readiness sprint</label>
+            </form>
+            <div id="implementation-guidance" class="detail-box">
+              <p><strong>Recommended approach:</strong> choose an implementation focus option above.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- =========================================
+           APPENDIX: SAS OPERATIONALIZATION OPTIONS (Collapsed)
+           ========================================= -->
+      <section id="sas-appendix" class="section reveal">
+        <details class="appendix-wrapper">
+          <summary class="appendix-toggle">
+            <span class="section-kicker">Appendix</span>
+            <h2>SAS Operationalization Options</h2>
+            <p class="reg-note">Expand to explore how SAS platforms can operationalize the governance concepts discussed above.</p>
+          </summary>
+          <div class="appendix-content">
+            <div class="grid-two">
+              <article class="panel">
+                <h3>Capability map</h3>
+                <div class="table-wrap">
+                  <table id="capability-table">
+                    <thead>
+                      <tr>
+                        <th>Governance need</th>
+                        <th>SAS capability</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </article>
+              <article class="panel">
+                <h3>Governance workflow blueprint</h3>
+                <svg viewBox="0 0 520 260" class="reference-svg" aria-label="Workflow blueprint">
+                  <rect x="24" y="24" width="142" height="62" rx="10" fill="#dce9f6" />
+                  <rect x="190" y="24" width="142" height="62" rx="10" fill="#e3efe7" />
+                  <rect x="356" y="24" width="142" height="62" rx="10" fill="#f4e7cc" />
+                  <rect x="24" y="112" width="142" height="62" rx="10" fill="#f0e4ef" />
+                  <rect x="190" y="112" width="142" height="62" rx="10" fill="#e8f1df" />
+                  <rect x="356" y="112" width="142" height="62" rx="10" fill="#ddebf1" />
+                  <rect x="24" y="200" width="474" height="40" rx="10" fill="#f3f6f9" stroke="#a8bbca" />
+                  <text x="38" y="60">Inventory</text>
+                  <text x="204" y="60">Validation</text>
+                  <text x="370" y="60">Approval</text>
+                  <text x="38" y="148">Monitoring</text>
+                  <text x="204" y="148">Fairness</text>
+                  <text x="370" y="148">Audit pack</text>
+                  <text x="38" y="225">Cross-cutting: lineage, metadata, controls, and evidence traceability</text>
+                </svg>
+                <div id="blueprint-controls" class="tabs"></div>
+                <div id="capability-detail" class="detail-box"></div>
+              </article>
+            </div>
+          </div>
+        </details>
+      </section>
+    </main>
+
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top">&#8593;</button>
+
+    <div id="examiner-onboarding" class="examiner-onboarding" aria-hidden="true">
+      <div class="examiner-onboarding-card" role="dialog" aria-modal="true" aria-labelledby="examiner-onboarding-title">
+        <h3 id="examiner-onboarding-title">Examiner perspective enabled</h3>
+        <p>
+          This view shows you what regulators see when they review your governance. Notice how priorities shift:
+          it is not about what is most innovative, but what is most defensible.
+        </p>
+        <p class="reg-note">This guide will auto-close in about 20 seconds, or you can close it now.</p>
+        <button id="examiner-onboarding-close" class="btn btn-outline small-btn" type="button">Close</button>
+      </div>
+    </div>
+
+    <div id="export-feedback-modal" class="export-feedback-modal" aria-hidden="true">
+      <div class="export-feedback-card" role="dialog" aria-modal="true" aria-labelledby="export-feedback-title">
+        <div id="export-spinner" class="spinner" aria-hidden="true"></div>
+        <div id="export-success-check" class="export-success-check" aria-hidden="true">&#10003;</div>
+        <h3 id="export-feedback-title">Preparing your governance summary...</h3>
+        <p id="export-feedback-copy">We are assembling your export package and formatting it for download.</p>
+        <div class="export-feedback-actions">
+          <button id="export-feedback-download" class="btn btn-primary" type="button" hidden>Download</button>
+          <button id="export-feedback-close" class="btn btn-outline" type="button" hidden>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="scenarios-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
